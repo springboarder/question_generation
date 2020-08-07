@@ -76,7 +76,7 @@ def upload_file():
             return render_template('index.html', result = 'TooMany requests try again'), 429
 
         req = {
-            'input': [input_text]
+            'input': input_text
         }
         requests_queue.put(req)
 
