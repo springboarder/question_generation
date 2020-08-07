@@ -1,0 +1,81 @@
+<!doctype html>
+    <head>
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <!-- Project Title! -->
+        <title>Question Generator</title>    
+    </head>
+    <script>
+        function create_element(htmlString) {
+            document.write(htmlString)
+            }
+        function click_submit(){
+            document.getElementById("submit_btn").disabled = true;
+        }
+        
+    </script>
+    <body>
+        <div class = "container">
+            <div class="jumbotron mt-3">
+                 <!-- Proejct Title -->
+                 
+                <h1>Q Generator<p style="font-size:medium;">(ver 1.0.0)</p></h1>
+                <!-- Github link and Ainize link -->
+                <A>Git Hub repository : </A> <A href="https://github.com/Wook-2/question_generation">https://github.com/Wook-2/question_generation</A>
+                <br>
+                <hr class="solid">
+                    
+                    <div id = 'inputImage' ">
+                        <h2>Upload </h2>
+                        <form action="" method="post" enctype="multipart/form-data" onsubmit="click_submit()">
+                            <p>Type sentence:<br>
+                                <textarea type=text name=input style="width: 400px; height: 150px;"></textarea></p>
+                               
+                               
+                               <input id="submit_btn"class="btn btn-primary btn-lg" style="margin-left: auto;" type=submit value=Generate>
+                        
+                          </form>
+                        <!-- <label for="label1">label1 : </label>
+                        <input type = 'file' id = 'input1' style="margin-right: 10px; margin-bottom: 10px;">
+                        <label for="label2">label2: </label>
+                        <input type = 'file' id = 'input2' style="margin-right: 10px; margin-bottom: 10px;">
+                        <button id = "submit" type='submit' class="btn btn-primary btn-lg" style="margin-left: auto;"> submit </button> -->
+                    
+                    
+                    </div>
+
+                <!-- If your project have a input files -->
+                
+                
+                <!-- Result Box -->
+                <!-- <div id ='resultBox' style="margin-left: auto; margin-right: auto;"> -->
+                    
+                    
+                    
+                    {% if result %}
+                    <h2>Generated Q&A</h2>
+                    {% for table in result %}
+                        {{titles[loop.index]}}
+                        {{ table|safe }}
+                    {% endfor %}
+                    <h2>Generated Question</h2>
+                    {% for q in question %}
+                    <p>{{ q }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    <br><br>
+                    
+                <!-- </div> -->
+            </div>
+        </div>
+    </body>
+
+
