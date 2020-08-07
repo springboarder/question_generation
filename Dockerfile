@@ -6,5 +6,7 @@ RUN python -m nltk.downloader punkt
 
 EXPOSE 8080
 
+RUN python3 pre_load.py
+COPY . .
 
 CMD python3 server.py
