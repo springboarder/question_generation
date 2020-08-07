@@ -59,7 +59,9 @@
                 <!-- Result Box -->
                 <!-- <div id ='resultBox' style="margin-left: auto; margin-right: auto;"> -->
                     
-                    
+                    {% if error %}
+                    <h2>{{ error }}</h2>
+                    {% endif %}
                     
                     {% if result %}
                     <h2>Generated Q&A</h2>
