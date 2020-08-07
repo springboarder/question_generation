@@ -100,4 +100,4 @@ def checkHealth():
 #     return render_template('index.html', result = 'The image size is too large'), 413
 
 if __name__ == '__main__':
-    app.run(debug=False, port=8080, host='0.0.0.0')
+    app.run(debug=False, port=8080, host='0.0.0.0', threaded=False)
