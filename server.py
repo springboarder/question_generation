@@ -66,7 +66,7 @@ def upload_file():
         input_text = str(request.form['input'])
 
         if len(input_text) == 0:
-            return render_template('index.html', result = 'No Input'), 400
+            return render_template('index.html', error = 'No Input'), 400
 
         # nlp = pipeline("multitask-qa-qg")
         # qg = pipeline("e2e-qg")
