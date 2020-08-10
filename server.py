@@ -36,7 +36,7 @@ def handle_requests_by_batch():
                 continue
             batch_outputs = []
             for request in requests_batch:
-                batch_outputs.append(run(request['input']))
+                batch_outputs.append(run(request['input'][0]))
 
             for request, output in zip(requests_batch, batch_outputs):
                 request['output'] = output
@@ -78,7 +78,7 @@ def upload_file():
             return render_template('index.html', error = 'TooMany requests try again'), 429
 
         req = {
-            'input': input_text
+            'input': [input_text]
         }
         requests_queue.put(req)
 
@@ -86,8 +86,6 @@ def upload_file():
             time.sleep(CHECK_INTERVAL)
         [df, generated_q] = req['output']
 
-        
-        
         return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q)
             #return redirect(request.url)
     return render_template('index.html')
