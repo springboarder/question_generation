@@ -1,3 +1,6 @@
+[![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://qg-wook-2.endpoint.ainize.ai/)
+
+
 # Question Generation using 🤗transformers
 
 - [Question Generation using 🤗transformers](#question-generation-using-transformers)

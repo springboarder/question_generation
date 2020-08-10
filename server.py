@@ -47,10 +47,12 @@ def run(input_text):
     
     # nlp = pipeline("multitask-qa-qg")
     # qg = pipeline("e2e-qg")
-        
-    generated_text = nlp(input_text)
-    generated_q = qg(input_text)
-    df = pd.DataFrame(generated_text)
+    try:
+        generated_text = nlp(input_text)
+        generated_q = qg(input_text)
+        df = pd.DataFrame(generated_text)
+    except ValueError:
+        return render_template('index.html', error = 'ValueError'), 400
 
     return [df, generated_q]
 
