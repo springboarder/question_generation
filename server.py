@@ -75,7 +75,7 @@ def upload_file():
         # df = pd.DataFrame(generated_text)
 
         if requests_queue.qsize() >= BATCH_SIZE:
-            return render_template('index.html', result = 'TooMany requests try again'), 429
+            return render_template('index.html', error = 'TooMany requests try again'), 429
 
         req = {
             'input': input_text
