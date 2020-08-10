@@ -52,7 +52,8 @@ def run(input_text):
         generated_q = qg(input_text)
         df = pd.DataFrame(generated_text)
     except ValueError:
-        return render_template('index.html', error = 'ValueError'), 400
+        result = 'error'
+        return result
 
     return [df, generated_q]
 
@@ -86,6 +87,9 @@ def upload_file():
 
         while 'output' not in req:
             time.sleep(CHECK_INTERVAL)
+        
+        if req['output'] == 'error':
+            return render_template('index.html', error = 'ValueError'), 400
         [df, generated_q] = req['output']
 
         return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q)
