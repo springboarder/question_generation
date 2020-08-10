@@ -22,6 +22,10 @@ requests_queue = Queue()
 BATCH_SIZE = 1
 CHECK_INTERVAL = 0.1
 
+#preload model
+nlp = pipeline("multitask-qa-qg")
+qg = pipeline("e2e-qg")
+
 def handle_requests_by_batch():
     while True:
         requests_batch = []
@@ -41,11 +45,8 @@ threading.Thread(target=handle_requests_by_batch).start()
 
 def run(input_text):
     
-    nlp = pipeline("multitask-qa-qg")
-    qg = pipeline("e2e-qg")
-    
-    generated_text = nlp(input_text)
-    generated_q = qg(input_text)
+    # nlp = pipeline("multitask-qa-qg")
+    # qg = pipeline("e2e-qg")
         
     generated_text = nlp(input_text)
     generated_q = qg(input_text)
@@ -59,7 +60,6 @@ def run(input_text):
 # Web server
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
-# @app.route('/uploadfile', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
 
@@ -94,7 +94,7 @@ def upload_file():
 
 @app.route('/healthz', methods=['GET'])
 def checkHealth():
-	return "Pong",200
+	return "Alive",200
 
 # @app.errorhandler(413)
 # def request_entity_too_large(error):
