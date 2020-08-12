@@ -92,7 +92,7 @@ def upload_file():
             return render_template('index.html', error = 'ValueError'), 400
         [df, generated_q] = req['output']
 
-        return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q)
+        return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q, input_text=input_text)
     return render_template('index.html')
 
 @app.route('/healthz', methods=['GET'])

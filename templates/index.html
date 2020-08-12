@@ -28,10 +28,13 @@
             <div class="jumbotron mt-3">
                  <!-- Proejct Title -->
                  
-                <h1>Question <br> Generator<p style="font-size:medium;">(ver 1.0.0)</p></h1>
+                <h1>Question Generator<p style="font-size:medium;">(ver 1.0.0)</p></h1>
                 <!-- Github link and Ainize link -->
                 <A>Git Hub repository : </A> <A href="https://github.com/Wook-2/question_generation">https://github.com/Wook-2/question_generation</A>
                 <br>
+                <hr class="solid">
+                <h3>Example</h3>
+                <img src="../static/example.png" style="width: 80%; border-radius: 5px;"  >
                 <hr class="solid">
                 <h3>How to use?</h3>
                 <p style="font-weight: bold;">1. Type some information.(copy some information from wikipedia will be awesome.)<br>- <A href="https://www.wikipedia.org/">Wikipedia</A><br>- <A href="https://papago.naver.com/">Papago</A></p>
@@ -43,9 +46,11 @@
                     <div id = 'inputImage' ">
                         <h3>Typing Box</h3>
                         <form action="" method="post" enctype="multipart/form-data" onsubmit="click_submit()">
-                            
+                                {% if input_text %}
+                                <textarea type=text name=input style="width: 400px; height: 150px;" >{{ input_text }}</textarea></p>
+                                {% else %}
                                 <textarea type=text name=input style="width: 400px; height: 150px;" >Question generation is the task of automatically generating questions from a text paragraph.</textarea></p>
-                               
+                                {% endif %}
                                
                                <input id="submit_btn"class="btn btn-primary btn-lg" style="margin-left: auto;" type=submit value='Generate'>
                         
@@ -58,6 +63,7 @@
                     
                     
                     </div>
+                    <hr class="solid">
 
                 <!-- If your project have a input files -->
                 
