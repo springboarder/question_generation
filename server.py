@@ -119,8 +119,8 @@ def generate_q():
             return render_template('index.html', error = 'ValueError'), 400
         
         [df, generated_q] = req['output']
-
-        return jsonify(df)
+        df = df.to_dict()
+        return df
     return None
 
     
