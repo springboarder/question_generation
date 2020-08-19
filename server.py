@@ -95,6 +95,37 @@ def upload_file():
         return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q, input_text=input_text)
     return render_template('index.html')
 
+@app.route('/generate', methods=['POST'])
+def generate_q():
+    if request.method == 'POST':
+            
+        input_text = str(request.form['input'])
+
+        if len(input_text) == 0:
+            return 'No input', 400
+        
+        if requests_queue.qsize() >= BATCH_SIZE:
+            return {'error': 'TooMany requests try again'}, 429
+        
+        req = {
+            'input': [input_text]
+        }
+        requests_queue.put(req)
+
+        while 'output' not in req:
+            time.sleep(CHECK_INTERVAL)
+            
+        if req['output'] == 'error':
+            return render_template('index.html', error = 'ValueError'), 400
+        
+        [df, generated_q] = req['output']
+        df = df.to_dict()
+        return df
+    return None
+
+    
+
+
 @app.route('/healthz', methods=['GET'])
 def checkHealth():
 	return "Alive",200
