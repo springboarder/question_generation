@@ -43,13 +43,13 @@
 
                 <hr class="solid">
                     
-                    <div id = 'inputImage' ">
+                    <div id = 'inputImage'>
                         <h3>Typing Box</h3>
                         <form action="" method="post" enctype="multipart/form-data" onsubmit="click_submit()">
                                 {% if input_text %}
                                 <textarea type=text name=input style="width: 400px; height: 150px;" >{{ input_text }}</textarea></p>
                                 {% else %}
-                                <textarea type=text name=input style="width: 400px; height: 150px;" >Question generation is the task of automatically generating questions from a text paragraph.</textarea></p>
+                                <textarea type=text name=input style="width: 400px; height: 150px;" >Python is a programming language. Created by Guido van Rossum and first released in 1991.</textarea></p>
                                 {% endif %}
                                
                                <input id="submit_btn"class="btn btn-primary btn-lg" style="margin-left: auto;" type=submit value='Generate'>
@@ -63,7 +63,6 @@
                     
                     
                     </div>
-                    <hr class="solid">
 
                 <!-- If your project have a input files -->
                 
@@ -76,12 +75,13 @@
                     {% endif %}
                     
                     {% if result %}
+		    <hr class='solid'>
                     <h2>Generated Q&A</h2>
                     {% for table in result %}
                         {{titles[loop.index]}}
                         {{ table|safe }}
                     {% endfor %}
-                    <h2>Generated Question</h2>
+                    <h2><br>Generated Question</h2>
                     {% for q in question %}
                     <p>{{ q }}</p>
                     {% endfor %}
