@@ -1,4 +1,4 @@
-[![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://qg-wook-2.endpoint.ainize.ai/)
+[![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.ai/Wook-2/question_generation?branch=master)
 
 
 # Question Generation using 🤗transformers
