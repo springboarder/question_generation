@@ -63,7 +63,7 @@ def upload_file():
             return render_template('index.html', error = 'No Input'), 400
 
         if requests_queue.qsize() >= BATCH_SIZE:
-            return render_template('index.html', error = 'TooMany requests try again'), 429
+            return render_template('index.html', error = 'TooMany requests. please try again'), 429
 
         req = {
             'input': [input_text]
@@ -74,7 +74,7 @@ def upload_file():
             time.sleep(CHECK_INTERVAL)
         
         if req['output'] == 'error':
-            return render_template('index.html', error = 'ValueError'), 400
+            return render_template('index.html', error = 'Invalid text. please try again.'), 400
         [df, generated_q] = req['output']
 
         return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q, input_text=input_text)
@@ -92,7 +92,7 @@ def generate_q():
             return 'No input', 400
         
         if requests_queue.qsize() >= BATCH_SIZE:
-            return {'error': 'TooMany requests try again'}, 429
+            return {'error': 'TooMany requests. please try again'}, 429
         
         req = {
             'input': [input_text]
@@ -103,7 +103,7 @@ def generate_q():
             time.sleep(CHECK_INTERVAL)
             
         if req['output'] == 'error':
-            return render_template('index.html', error = 'ValueError'), 400
+            return render_template('index.html', error = 'Invalid text. please try again.'), 400
         
         [df, generated_q] = req['output']
         df = df.to_dict()
