@@ -1,8 +1,6 @@
 import os
-from flask import Flask, request, send_file, flash, redirect, render_template, url_for, jsonify
+from flask import Flask, request, send_file, render_template
 from werkzeug.utils import secure_filename
-import numpy as np
-import io
 from queue import Queue, Empty
 import time
 import threading
@@ -10,14 +8,9 @@ from pipelines import pipeline
 import pandas as pd
 
 
-
-
-
 app = Flask(__name__, template_folder='templates')
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 
-############
-############
 requests_queue = Queue()
 BATCH_SIZE = 1
 CHECK_INTERVAL = 0.1
@@ -25,6 +18,7 @@ CHECK_INTERVAL = 0.1
 #preload model
 nlp = pipeline("multitask-qa-qg")
 qg = pipeline("e2e-qg")
+
 
 def handle_requests_by_batch():
     while True:
@@ -40,13 +34,12 @@ def handle_requests_by_batch():
 
             for request, output in zip(requests_batch, batch_outputs):
                 request['output'] = output
-                
+
+		
 threading.Thread(target=handle_requests_by_batch).start()
 
+
 def run(input_text):
-    
-    # nlp = pipeline("multitask-qa-qg")
-    # qg = pipeline("e2e-qg")
     try:
         generated_text = nlp(input_text)
         generated_q = qg(input_text)
@@ -57,8 +50,6 @@ def run(input_text):
 
     return [df, generated_q]
 
-##############
-##############
 
 # Web server
 @app.route('/', methods=['GET', 'POST'])
@@ -70,12 +61,6 @@ def upload_file():
 
         if len(input_text) == 0:
             return render_template('index.html', error = 'No Input'), 400
-
-        # nlp = pipeline("multitask-qa-qg")
-        # qg = pipeline("e2e-qg")
-        # generated_text = nlp(input_text)
-        # generated_q = qg(input_text)
-        # df = pd.DataFrame(generated_text)
 
         if requests_queue.qsize() >= BATCH_SIZE:
             return render_template('index.html', error = 'TooMany requests try again'), 429
@@ -95,6 +80,8 @@ def upload_file():
         return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q, input_text=input_text)
     return render_template('index.html')
 
+
+# API server
 @app.route('/generate', methods=['POST'])
 def generate_q():
     if request.method == 'POST':
@@ -123,17 +110,11 @@ def generate_q():
         return df
     return None
 
-    
-
 
 @app.route('/healthz', methods=['GET'])
 def checkHealth():
 	return "Alive",200
 
-# @app.errorhandler(413)
-# def request_entity_too_large(error):
-#     # return {'error': 'File Too Large'}, 413
-#     return render_template('index.html', result = 'The image size is too large'), 413
 
 if __name__ == '__main__':
     app.run(debug=False, port=8080, host='0.0.0.0')
