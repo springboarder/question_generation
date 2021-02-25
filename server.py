@@ -107,7 +107,7 @@ def generate_q():
     return None
 
 @app.route('/answer', methods=['POST'])
-def generate_q():
+def generate_qa():
     if request.method == 'POST':
             
         input_text = str(request.form['input'])
