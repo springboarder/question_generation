@@ -18,7 +18,8 @@ CHECK_INTERVAL = 0.1
 #preload model
 nlp = pipeline("e2e-qg", model="valhalla/t5-base-e2e-qg")
 qg = pipeline("e2e-qg")
-
+nlp2 = pipeline("question-generation")
+qg2 = pipeline("multitask-qa-qg")
 
 def handle_requests_by_batch():
     while True:
@@ -35,6 +36,20 @@ def handle_requests_by_batch():
             for request, output in zip(requests_batch, batch_outputs):
                 request['output'] = output
 
+def handle_requests_by_batch_qa():
+    while True:
+        requests_batch = []
+        while not (len(requests_batch) >= BATCH_SIZE):
+            try:
+                requests_batch.append(requests_queue.get(timeout=CHECK_INTERVAL))
+            except Empty:
+                continue
+            batch_outputs = []
+            for request in requests_batch:
+                batch_outputs.append(runqa(request['input'][0]))
+
+            for request, output in zip(requests_batch, batch_outputs):
+                request['output'] = output
 		
 threading.Thread(target=handle_requests_by_batch).start()
 
@@ -50,6 +65,17 @@ def run(input_text):
 
     return [df, generated_q]
 
+def runqa(input_text):
+    try:
+        generated_text = nlp2(input_text)
+        generated_q = qg2(input_text)
+        df = pd.DataFrame(generated_text)
+    except ValueError:
+        result = 'error'
+        return result
+
+    return [df, generated_q]
+
 
 # API server
 @app.route('/generate', methods=['POST'])
@@ -57,7 +83,6 @@ def generate_q():
     if request.method == 'POST':
             
         input_text = str(request.form['input'])
-        nlpengine_text = str(request.form['nlp'])
 
         if len(input_text) == 0:
             return 'No input', 400
@@ -81,6 +106,33 @@ def generate_q():
         return df
     return None
 
+@app.route('/answer', methods=['POST'])
+def generate_q():
+    if request.method == 'POST':
+            
+        input_text = str(request.form['input'])
+
+        if len(input_text) == 0:
+            return 'No input', 400
+        
+        if requests_queue.qsize() >= BATCH_SIZE:
+            return {'error': 'TooMany requests. please try again'}, 429
+        
+        req = {
+            'input': [input_text]
+        }
+        requests_queue.put(req)
+
+        while 'output' not in req:
+            time.sleep(CHECK_INTERVAL)
+            
+        if req['output'] == 'error':
+            return render_template('index.html', error = 'Invalid text. please try again.'), 400
+        
+        [df, generated_q] = req['output']
+        df = df.to_dict()
+        return df
+    return None
 
 @app.route('/healthz', methods=['GET'])
 def checkHealth():
