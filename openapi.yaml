@@ -52,3 +52,36 @@ paths:
             description: Bad request (Can not load images)
          '500':
             description: Server Side Error
+  /answer:
+    post:
+      tags:
+      - Question Generator
+      requestBody:
+        required: true
+        description: "Type text"
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                input:
+                  description: Type text
+                  type: string
+
+            encoding:
+              files:
+                contentType: string
+      responses:
+         '200':
+            description: success
+            content:
+              application/json:
+                  schema:
+                    type: object
+                    additionalProperties:
+                      type: string
+
+         '400':
+            description: Bad request (Can not load images)
+         '500':
+            description: Server Side Error
