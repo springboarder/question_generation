@@ -1,4 +1,3 @@
-
 openapi: 3.0.1
 info:
   title: Question Generator
@@ -26,6 +25,9 @@ paths:
       requestBody:
         required: true
         description: "Type text"
+        parameters:
+        schema:
+          type: string
         content:
           multipart/form-data:
             schema:
@@ -33,6 +35,12 @@ paths:
               properties:
                 input:
                   description: Type text
+                  type: string
+                type:
+                  description: NLP Engine
+                  type: string
+                model:
+                  description: NLP model
                   type: string
 
             encoding:
