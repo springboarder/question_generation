@@ -12,11 +12,11 @@ app = Flask(__name__, template_folder='templates')
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 
 requests_queue = Queue()
-BATCH_SIZE = 1
+BATCH_SIZE = 10
 CHECK_INTERVAL = 0.1
 
 #preload model
-nlp = pipeline("multitask-qa-qg")
+nlp = pipeline("e2e-qg", model="valhalla/t5-base-e2e-qg")
 qg = pipeline("e2e-qg")
 
 
@@ -51,42 +51,13 @@ def run(input_text):
     return [df, generated_q]
 
 
-# Web server
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-
-        input_text = str(request.form['input'])
-
-        if len(input_text) == 0:
-            return render_template('index.html', error = 'No Input'), 400
-
-        if requests_queue.qsize() >= BATCH_SIZE:
-            return render_template('index.html', error = 'TooMany requests. please try again'), 429
-
-        req = {
-            'input': [input_text]
-        }
-        requests_queue.put(req)
-
-        while 'output' not in req:
-            time.sleep(CHECK_INTERVAL)
-        
-        if req['output'] == 'error':
-            return render_template('index.html', error = 'Invalid text. please try again.'), 400
-        [df, generated_q] = req['output']
-
-        return render_template('index.html', result=[df.to_html(classes='data')], titles=df.columns.values, question=generated_q, input_text=input_text)
-    return render_template('index.html')
-
-
 # API server
 @app.route('/generate', methods=['POST'])
 def generate_q():
     if request.method == 'POST':
             
         input_text = str(request.form['input'])
+        nlpengine_text = str(request.form['nlp'])
 
         if len(input_text) == 0:
             return 'No input', 400
