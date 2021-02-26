@@ -17,7 +17,7 @@ CHECK_INTERVAL = 0.1
 
 #preload model
 nlp = pipeline("multitask-qa-qg")
-qg = pipeline("e2e-qg")
+qg = pipeline("multitask-qa-qg")
 
 def handle_requests_by_batch():
     while True:
