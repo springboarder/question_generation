@@ -17,7 +17,6 @@ CHECK_INTERVAL = 0.1
 
 #preload model
 nlp = pipeline("multitask-qa-qg")
-qg = pipeline("multitask-qa-qg")
 
 def handle_requests_by_batch():
     while True:
@@ -40,13 +39,12 @@ threading.Thread(target=handle_requests_by_batch).start()
 def run(input_text):
     try:
         generated_text = nlp(input_text)
-        generated_q = qg(input_text)
         df = pd.DataFrame(generated_text)
     except ValueError:
         result = 'error'
         return result
 
-    return [df, generated_q]
+    return [df]
 
 # API server
 @app.route('/generate', methods=['POST'])
