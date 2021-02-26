@@ -15,10 +15,6 @@ requests_queue = Queue()
 BATCH_SIZE = 10
 CHECK_INTERVAL = 0.1
 
-#preload model
-nlp = pipeline(type_text, model=model_text)
-qg = pipeline(type_text)
-
 def handle_requests_by_batch():
     while True:
         requests_batch = []
@@ -56,6 +52,9 @@ def generate_q():
         input_text = str(request.form['input'])
         type_text = str(request.form['type'])
         model_text = str(request.form['model'])
+
+        nlp = pipeline(type_text, model=model_text)
+        qg = pipeline(type_text)
 
         if len(input_text) == 0:
             return 'No input', 400
