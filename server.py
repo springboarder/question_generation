@@ -16,7 +16,7 @@ BATCH_SIZE = 10
 CHECK_INTERVAL = 0.1
 
 #preload model
-nlp = pipeline("e2e-qg", model="valhalla/t5-small-e2e-qg")
+nlp = pipeline("e2e-qg", model="valhalla/t5-base-e2e-qg")
 qg = pipeline("e2e-qg")
 
 def handle_requests_by_batch():
